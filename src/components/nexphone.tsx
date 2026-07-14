@@ -700,12 +700,21 @@ export function PromoBanner() {
                 Aproveite condições especiais em iPhone, Watch, AirPods e MacBook. Pix com 10% adicional.
               </p>
               <div className="mt-8 flex gap-3">
-                <button className="inline-flex h-11 items-center gap-2 rounded-full bg-white px-6 text-[13px] font-medium text-black transition-transform hover:scale-[1.03]">
+                <Link
+                  to="/categoria/$slug"
+                  params={{ slug: "iphone" }}
+                  className="inline-flex h-11 items-center gap-2 rounded-full bg-white px-6 text-[13px] font-medium text-black transition-transform hover:scale-[1.03]"
+                >
                   Ver ofertas <ArrowRight className="h-4 w-4" />
-                </button>
-                <button className="inline-flex h-11 items-center gap-2 rounded-full border border-white/20 px-6 text-[13px] font-medium text-white hover:bg-white/10">
+                </Link>
+                <a
+                  href="https://wa.me/5531983194026?text=Ol%C3%A1!%20Quero%20usar%20o%20cupom%20NEXPRO10"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex h-11 items-center gap-2 rounded-full border border-white/20 px-6 text-[13px] font-medium text-white hover:bg-white/10"
+                >
                   Cupom NEXPRO10
-                </button>
+                </a>
               </div>
             </div>
             <div className="relative">
