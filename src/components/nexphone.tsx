@@ -39,21 +39,24 @@ import prodMacbook from "@/assets/prod-macbook.jpg";
 import prodIpad from "@/assets/prod-ipad.jpg";
 import prodMagsafe from "@/assets/prod-magsafe.jpg";
 
+import { useCart } from "@/lib/cart-store";
+import { formatBRL } from "@/lib/product-images";
+
 /* ---------------- Nav ---------------- */
 
-const NAV_LINKS = [
-  { label: "iPhone", href: "#categorias" },
-  { label: "Apple Watch", href: "#categorias" },
-  { label: "AirPods", href: "#categorias" },
-  { label: "Mac", href: "#categorias" },
-  { label: "iPad", href: "#categorias" },
-  { label: "Acessórios", href: "#categorias" },
-  { label: "Promoções", href: "#promocoes" },
+const NAV_LINKS: { label: string; to: string; params?: Record<string, string> }[] = [
+  { label: "iPhone", to: "/categoria/$slug", params: { slug: "iphone" } },
+  { label: "Apple Watch", to: "/categoria/$slug", params: { slug: "watch" } },
+  { label: "AirPods", to: "/categoria/$slug", params: { slug: "airpods" } },
+  { label: "Mac", to: "/categoria/$slug", params: { slug: "mac" } },
+  { label: "iPad", to: "/categoria/$slug", params: { slug: "ipad" } },
+  { label: "Acessórios", to: "/categoria/$slug", params: { slug: "acessorios" } },
 ];
 
 export function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const cart = useCart();
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
     onScroll();
@@ -79,13 +82,14 @@ export function Nav() {
 
         <nav className="hidden items-center gap-7 lg:flex">
           {NAV_LINKS.map((l) => (
-            <a
+            <Link
               key={l.label}
-              href={l.href}
+              to={l.to}
+              params={l.params as any}
               className="text-[13px] text-white/75 transition-colors hover:text-white"
             >
               {l.label}
-            </a>
+            </Link>
           ))}
         </nav>
 
@@ -96,9 +100,17 @@ export function Nav() {
           <button aria-label="Conta" className="hidden h-9 w-9 place-items-center rounded-full transition-colors hover:bg-white/10 sm:grid">
             <User className="h-4 w-4" />
           </button>
-          <button aria-label="Sacola" className="relative grid h-9 w-9 place-items-center rounded-full transition-colors hover:bg-white/10">
+          <button
+            aria-label="Sacola"
+            onClick={cart.open}
+            className="relative grid h-9 w-9 place-items-center rounded-full transition-colors hover:bg-white/10"
+          >
             <ShoppingBag className="h-4 w-4" />
-            <span className="absolute right-1 top-1 h-1.5 w-1.5 rounded-full bg-[color:var(--brand)]" />
+            {cart.count > 0 && (
+              <span className="absolute -right-0.5 -top-0.5 grid h-4 min-w-4 place-items-center rounded-full bg-[color:var(--brand)] px-1 text-[10px] font-semibold text-white">
+                {cart.count}
+              </span>
+            )}
           </button>
           <button
             aria-label="Menu"
@@ -115,14 +127,15 @@ export function Nav() {
           <div className="mx-auto max-w-[1440px] px-5 py-4">
             <div className="flex flex-col gap-1">
               {NAV_LINKS.map((l) => (
-                <a
+                <Link
                   key={l.label}
-                  href={l.href}
+                  to={l.to}
+                  params={l.params as any}
                   onClick={() => setOpen(false)}
                   className="rounded-lg px-3 py-2.5 text-sm text-white/85 hover:bg-white/5"
                 >
                   {l.label}
-                </a>
+                </Link>
               ))}
             </div>
           </div>
@@ -187,13 +200,14 @@ export function Hero() {
           </p>
 
           <div className="mt-9 flex flex-wrap items-center gap-3">
-            <a
-              href="#produtos"
+            <Link
+              to="/categoria/$slug"
+              params={{ slug: "iphone" }}
               className="group inline-flex h-12 items-center gap-2 rounded-full bg-white px-6 text-[14px] font-medium text-black transition-all hover:scale-[1.02] hover:shadow-[0_0_0_6px_rgba(255,255,255,0.08)]"
             >
               Comprar agora
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-            </a>
+            </Link>
             <a
               href="https://wa.me/5531983194026"
               className="inline-flex h-12 items-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 text-[14px] font-medium text-white backdrop-blur transition-all hover:bg-white/10"
@@ -299,12 +313,20 @@ export function Showcase() {
                 <span className="font-semibold text-white">R$ 9.499</span> à vista.
               </p>
               <div className="mt-6 flex gap-3">
-                <button className="inline-flex h-10 items-center gap-2 rounded-full bg-white px-5 text-[13px] font-medium text-black transition-transform hover:scale-[1.03]">
+                <Link
+                  to="/produto/$slug"
+                  params={{ slug: "iphone-16-pro-256gb" }}
+                  className="inline-flex h-10 items-center gap-2 rounded-full bg-white px-5 text-[13px] font-medium text-black transition-transform hover:scale-[1.03]"
+                >
                   Comprar <ArrowRight className="h-3.5 w-3.5" />
-                </button>
-                <button className="inline-flex h-10 items-center gap-2 rounded-full border border-white/20 px-5 text-[13px] font-medium text-white transition-colors hover:bg-white/10">
+                </Link>
+                <Link
+                  to="/produto/$slug"
+                  params={{ slug: "iphone-16-pro-256gb" }}
+                  className="inline-flex h-10 items-center gap-2 rounded-full border border-white/20 px-5 text-[13px] font-medium text-white transition-colors hover:bg-white/10"
+                >
                   Saiba mais
-                </button>
+                </Link>
               </div>
             </div>
             <img
@@ -320,9 +342,10 @@ export function Showcase() {
 
           <BentoCard
             image={catWatch}
-            title="Apple Watch Ultra 2"
-            price="R$ 8.299"
+            title="Apple Watch S10"
+            price="R$ 4.299"
             tone="dark"
+            slug="apple-watch-s10-42mm"
             className="md:col-span-2"
           />
           <BentoCard
@@ -330,22 +353,25 @@ export function Showcase() {
             title="AirPods Pro 2"
             price="R$ 1.899"
             tone="light"
+            slug="airpods-pro-2-usbc"
             className="md:col-span-2"
           />
 
           <BentoCard
             image={catMacbook}
-            title="MacBook Pro M4"
-            price="R$ 14.999"
+            title="MacBook Air M3"
+            price="R$ 9.499"
             tone="dark"
+            slug="macbook-air-m3-13"
             wide
             className="md:col-span-3"
           />
           <BentoCard
             image={catIpad}
-            title="iPad Pro M4"
-            price="R$ 10.499"
+            title="iPad Air M2"
+            price="R$ 6.299"
             tone="dark"
+            slug="ipad-air-m2-11"
             wide
             className="md:col-span-3"
           />
@@ -360,6 +386,7 @@ function BentoCard({
   title,
   price,
   tone,
+  slug,
   className = "",
   wide = false,
 }: {
@@ -367,12 +394,15 @@ function BentoCard({
   title: string;
   price: string;
   tone: "light" | "dark";
+  slug: string;
   className?: string;
   wide?: boolean;
 }) {
   const dark = tone === "dark";
   return (
-    <article
+    <Link
+      to="/produto/$slug"
+      params={{ slug }}
       className={`group relative flex ${
         wide ? "min-h-[280px]" : "min-h-[300px]"
       } flex-col justify-between overflow-hidden rounded-3xl p-7 ${
@@ -397,7 +427,7 @@ function BentoCard({
           wide ? "right-0 bottom-0 h-[110%] object-right-bottom" : "-right-6 top-1/2 -translate-y-1/2 h-[85%]"
         } w-auto object-contain transition-transform duration-700 group-hover:scale-[1.06]`}
       />
-    </article>
+    </Link>
   );
 }
 
@@ -429,19 +459,19 @@ function SectionHeader({
 
 /* ---------------- Categories ---------------- */
 
-const CATEGORIES = [
-  { name: "iPhone", count: 42 },
-  { name: "Apple Watch", count: 18 },
-  { name: "AirPods", count: 12 },
-  { name: "MacBook", count: 22 },
-  { name: "iPad", count: 16 },
-  { name: "Capinhas", count: 87 },
-  { name: "Películas", count: 34 },
-  { name: "Cabos", count: 28 },
-  { name: "Carregadores", count: 31 },
-  { name: "MagSafe", count: 19 },
-  { name: "Power Bank", count: 14 },
-  { name: "Caixas de Som", count: 11 },
+const CATEGORIES: { name: string; count: number; slug: string }[] = [
+  { name: "iPhone", count: 42, slug: "iphone" },
+  { name: "Apple Watch", count: 18, slug: "watch" },
+  { name: "AirPods", count: 12, slug: "airpods" },
+  { name: "MacBook", count: 22, slug: "mac" },
+  { name: "iPad", count: 16, slug: "ipad" },
+  { name: "Acessórios", count: 87, slug: "acessorios" },
+  { name: "Capinhas", count: 87, slug: "acessorios" },
+  { name: "Cabos", count: 28, slug: "acessorios" },
+  { name: "Carregadores", count: 31, slug: "acessorios" },
+  { name: "MagSafe", count: 19, slug: "acessorios" },
+  { name: "Power Bank", count: 14, slug: "acessorios" },
+  { name: "Caixas de Som", count: 11, slug: "acessorios" },
 ];
 
 export function Categories() {
@@ -454,15 +484,17 @@ export function Categories() {
             title="Explore o ecossistema Apple."
             subtitle="Do iPhone ao MagSafe. Do trabalho ao lazer. Tudo com procedência."
           />
-          <a href="#produtos" className="story-link inline-flex items-center gap-1 text-[13px] font-medium text-foreground">
+          <Link to="/categoria/$slug" params={{ slug: "iphone" }} className="story-link inline-flex items-center gap-1 text-[13px] font-medium text-foreground">
             Ver tudo <ArrowRight className="h-3.5 w-3.5" />
-          </a>
+          </Link>
         </div>
 
         <div className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-          {CATEGORIES.map((c) => (
-            <button
-              key={c.name}
+          {CATEGORIES.map((c, i) => (
+            <Link
+              key={`${c.name}-${i}`}
+              to="/categoria/$slug"
+              params={{ slug: c.slug }}
               className="group relative flex aspect-[4/5] flex-col justify-between overflow-hidden rounded-2xl border border-border bg-background p-5 text-left transition-all hover:-translate-y-1 hover:border-[color:var(--border-strong)] hover:shadow-[var(--shadow-soft)]"
             >
               <div className="grid h-10 w-10 place-items-center rounded-xl bg-foreground/5 text-foreground transition-colors group-hover:bg-[color:var(--brand)] group-hover:text-white">
@@ -472,7 +504,7 @@ export function Categories() {
                 <div className="text-[14px] font-semibold text-foreground">{c.name}</div>
                 <div className="mt-0.5 text-[11px] text-muted-foreground">{c.count} produtos</div>
               </div>
-            </button>
+            </Link>
           ))}
         </div>
       </div>
@@ -484,6 +516,7 @@ export function Categories() {
 
 type Product = {
   id: string;
+  slug: string;
   name: string;
   tag?: string;
   price: number;
@@ -495,14 +528,14 @@ type Product = {
 };
 
 const PRODUCTS: Product[] = [
-  { id: "1", name: "iPhone 16 Pro 256GB", tag: "Lançamento", price: 9499, oldPrice: 10499, installments: "12x R$ 791,58", image: prodIphone16, colors: ["#8b7d6c", "#111", "#e3e3e3", "#3a5a8a"], rating: 4.9 },
-  { id: "2", name: "iPhone 15 Pro 128GB", tag: "Mais vendido", price: 6799, oldPrice: 7999, installments: "12x R$ 566,58", image: prodIphone15, colors: ["#2a5a8a", "#111", "#8b7d6c", "#fff"], rating: 4.8 },
-  { id: "3", name: "Apple Watch S10 GPS 42mm", price: 4299, installments: "12x R$ 358,25", image: prodWatch, colors: ["#111", "#e3e3e3", "#f7b6c2"], rating: 4.9 },
-  { id: "4", name: "AirPods Pro 2 USB-C", tag: "Oferta", price: 1899, oldPrice: 2299, installments: "10x R$ 189,90", image: prodAirpods, rating: 4.9 },
-  { id: "5", name: "MacBook Air M3 13\" 256GB", price: 9499, installments: "12x R$ 791,58", image: prodMacbook, colors: ["#111", "#e3e3e3", "#8b7d6c"], rating: 5.0 },
-  { id: "6", name: "iPad Air M2 11\" 128GB", price: 6299, installments: "12x R$ 524,92", image: prodIpad, colors: ["#111", "#e3e3e3", "#b9c4d9", "#c8a2a2"], rating: 4.8 },
-  { id: "7", name: "Carregador MagSafe 25W", tag: "Novo", price: 599, installments: "6x R$ 99,83", image: prodMagsafe, rating: 4.7 },
-  { id: "8", name: "iPhone 15 128GB", price: 5299, oldPrice: 5999, installments: "12x R$ 441,58", image: prodIphone15, colors: ["#3a5a8a", "#111"], rating: 4.7 },
+  { id: "1", slug: "iphone-16-pro-256gb", name: "iPhone 16 Pro 256GB", tag: "Lançamento", price: 9499, oldPrice: 10499, installments: "12x R$ 791,58", image: prodIphone16, colors: ["#8b7d6c", "#111", "#e3e3e3", "#3a5a8a"], rating: 4.9 },
+  { id: "2", slug: "iphone-15-pro-128gb", name: "iPhone 15 Pro 128GB", tag: "Mais vendido", price: 6799, oldPrice: 7999, installments: "12x R$ 566,58", image: prodIphone15, colors: ["#2a5a8a", "#111", "#8b7d6c", "#fff"], rating: 4.8 },
+  { id: "3", slug: "apple-watch-s10-42mm", name: "Apple Watch S10 GPS 42mm", price: 4299, installments: "12x R$ 358,25", image: prodWatch, colors: ["#111", "#e3e3e3", "#f7b6c2"], rating: 4.9 },
+  { id: "4", slug: "airpods-pro-2-usbc", name: "AirPods Pro 2 USB-C", tag: "Oferta", price: 1899, oldPrice: 2299, installments: "10x R$ 189,90", image: prodAirpods, rating: 4.9 },
+  { id: "5", slug: "macbook-air-m3-13", name: "MacBook Air M3 13\" 256GB", price: 9499, installments: "12x R$ 791,58", image: prodMacbook, colors: ["#111", "#e3e3e3", "#8b7d6c"], rating: 5.0 },
+  { id: "6", slug: "ipad-air-m2-11", name: "iPad Air M2 11\" 128GB", price: 6299, installments: "12x R$ 524,92", image: prodIpad, colors: ["#111", "#e3e3e3", "#b9c4d9", "#c8a2a2"], rating: 4.8 },
+  { id: "7", slug: "carregador-magsafe-25w", name: "Carregador MagSafe 25W", tag: "Novo", price: 599, installments: "6x R$ 99,83", image: prodMagsafe, rating: 4.7 },
+  { id: "8", slug: "iphone-15-128gb", name: "iPhone 15 128GB", price: 5299, oldPrice: 5999, installments: "12x R$ 441,58", image: prodIphone15, colors: ["#3a5a8a", "#111"], rating: 4.7 },
 ];
 
 export function Products() {
@@ -546,6 +579,12 @@ function FilterPill({ children, active }: { children: React.ReactNode; active?: 
 
 function ProductCard({ p, index }: { p: Product; index: number }) {
   const discount = p.oldPrice ? Math.round(((p.oldPrice - p.price) / p.oldPrice) * 100) : 0;
+  const { addItem } = useCart();
+  const handleAdd = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    addItem({ slug: p.slug, name: p.name, price: p.price, image: p.image });
+  };
   return (
     <motion.article
       initial={{ opacity: 0, y: 24 }}
@@ -554,7 +593,11 @@ function ProductCard({ p, index }: { p: Product; index: number }) {
       transition={{ duration: 0.6, delay: (index % 4) * 0.06, ease: [0.22, 1, 0.36, 1] }}
       className="group relative flex flex-col overflow-hidden rounded-3xl border border-border bg-card transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-elevated)]"
     >
-      <div className="relative aspect-square overflow-hidden bg-[color:var(--surface)]">
+      <Link
+        to="/produto/$slug"
+        params={{ slug: p.slug }}
+        className="relative block aspect-square overflow-hidden bg-[color:var(--surface)]"
+      >
         {p.tag && (
           <span className="absolute left-3 top-3 z-10 rounded-full bg-foreground px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-background">
             {p.tag}
@@ -575,18 +618,25 @@ function ProductCard({ p, index }: { p: Product; index: number }) {
         />
         <button
           aria-label="Adicionar à sacola"
-          className="absolute right-3 bottom-3 grid h-10 w-10 translate-y-4 place-items-center rounded-full bg-foreground text-background opacity-0 shadow-lg transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100"
+          onClick={handleAdd}
+          className="absolute right-3 bottom-3 grid h-10 w-10 translate-y-4 place-items-center rounded-full bg-foreground text-background opacity-0 shadow-lg transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 hover:scale-110"
         >
           <Plus className="h-4 w-4" />
         </button>
-      </div>
+      </Link>
       <div className="flex flex-1 flex-col gap-2 p-5">
         <div className="flex items-center gap-1 text-[11px] text-muted-foreground">
           <Star className="h-3 w-3 fill-current text-yellow-500" /> {p.rating.toFixed(1)}
           <span className="text-border">·</span>
           <span>em estoque</span>
         </div>
-        <h3 className="text-[14px] font-semibold leading-tight text-foreground">{p.name}</h3>
+        <Link
+          to="/produto/$slug"
+          params={{ slug: p.slug }}
+          className="text-[14px] font-semibold leading-tight text-foreground hover:underline"
+        >
+          {p.name}
+        </Link>
         {p.colors && (
           <div className="flex gap-1.5">
             {p.colors.map((c) => (
@@ -597,18 +647,33 @@ function ProductCard({ p, index }: { p: Product; index: number }) {
         <div className="mt-1 flex items-baseline gap-2">
           {p.oldPrice && (
             <span className="text-[12px] text-muted-foreground line-through">
-              R$ {p.oldPrice.toLocaleString("pt-BR")}
+              {formatBRL(p.oldPrice)}
             </span>
           )}
           <span className="text-[18px] font-semibold text-foreground">
-            R$ {p.price.toLocaleString("pt-BR")}
+            {formatBRL(p.price)}
           </span>
         </div>
         <div className="text-[11px] text-muted-foreground">
           ou <span className="text-foreground">{p.installments}</span> sem juros
         </div>
         <div className="text-[11px] font-medium text-[color:var(--brand)]">
-          R$ {Math.round(p.price * 0.9).toLocaleString("pt-BR")} no PIX
+          {formatBRL(Math.round(p.price * 0.9))} no PIX
+        </div>
+        <div className="mt-3 flex gap-2">
+          <button
+            onClick={handleAdd}
+            className="inline-flex h-10 flex-1 items-center justify-center rounded-full bg-foreground text-[12px] font-medium text-background transition-transform hover:scale-[1.02]"
+          >
+            Adicionar à sacola
+          </button>
+          <Link
+            to="/produto/$slug"
+            params={{ slug: p.slug }}
+            className="inline-flex h-10 items-center justify-center rounded-full border border-border px-4 text-[12px] font-medium text-foreground hover:bg-foreground/5"
+          >
+            Ver
+          </Link>
         </div>
       </div>
     </motion.article>
@@ -635,12 +700,21 @@ export function PromoBanner() {
                 Aproveite condições especiais em iPhone, Watch, AirPods e MacBook. Pix com 10% adicional.
               </p>
               <div className="mt-8 flex gap-3">
-                <button className="inline-flex h-11 items-center gap-2 rounded-full bg-white px-6 text-[13px] font-medium text-black transition-transform hover:scale-[1.03]">
+                <Link
+                  to="/categoria/$slug"
+                  params={{ slug: "iphone" }}
+                  className="inline-flex h-11 items-center gap-2 rounded-full bg-white px-6 text-[13px] font-medium text-black transition-transform hover:scale-[1.03]"
+                >
                   Ver ofertas <ArrowRight className="h-4 w-4" />
-                </button>
-                <button className="inline-flex h-11 items-center gap-2 rounded-full border border-white/20 px-6 text-[13px] font-medium text-white hover:bg-white/10">
+                </Link>
+                <a
+                  href="https://wa.me/5531983194026?text=Ol%C3%A1!%20Quero%20usar%20o%20cupom%20NEXPRO10"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex h-11 items-center gap-2 rounded-full border border-white/20 px-6 text-[13px] font-medium text-white hover:bg-white/10"
+                >
                   Cupom NEXPRO10
-                </button>
+                </a>
               </div>
             </div>
             <div className="relative">
