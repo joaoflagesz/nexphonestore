@@ -1,24 +1,64 @@
 import { createFileRoute } from "@tanstack/react-router";
+import {
+  Nav,
+  Hero,
+  TrustBar,
+  Showcase,
+  Categories,
+  Products,
+  PromoBanner,
+  Reviews,
+  Partners,
+  InstagramSection,
+  FAQ,
+  Footer,
+  WhatsAppFab,
+  LaunchStrip,
+} from "@/components/nexphone";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
-  component: Index,
+  component: Home,
+  head: () => ({
+    meta: [
+      { title: "NexPhoneStore — iPhone, Apple Watch, AirPods e acessórios premium" },
+      {
+        name: "description",
+        content:
+          "Loja premium especializada em iPhones, Apple Watch, AirPods, iPads, Macs e acessórios Apple com garantia oficial e entrega para todo o Brasil.",
+      },
+      { property: "og:title", content: "NexPhoneStore — Tecnologia Apple Premium" },
+      {
+        property: "og:description",
+        content: "Os produtos Apple mais desejados, com garantia, atendimento especializado e envio em 24h.",
+      },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "/" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "theme-color", content: "#090909" },
+    ],
+    links: [{ rel: "canonical", href: "/" }],
+  }),
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
+function Home() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="min-h-screen bg-background">
+      <LaunchStrip />
+      <Nav />
+      <main>
+        <Hero />
+        <TrustBar />
+        <Showcase />
+        <Categories />
+        <Products />
+        <PromoBanner />
+        <Reviews />
+        <Partners />
+        <InstagramSection />
+        <FAQ />
+      </main>
+      <Footer />
+      <WhatsAppFab />
     </div>
   );
 }
