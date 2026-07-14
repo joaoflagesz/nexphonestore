@@ -195,7 +195,7 @@ export function Hero() {
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </a>
             <a
-              href="https://wa.me/5511999999999"
+              href="https://wa.me/5531983194026"
               className="inline-flex h-12 items-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 text-[14px] font-medium text-white backdrop-blur transition-all hover:bg-white/10"
             >
               <MessageCircle className="h-4 w-4" /> Falar no WhatsApp
@@ -734,14 +734,14 @@ export function InstagramSection() {
     <section className="bg-background py-20 md:py-28">
       <div className="mx-auto max-w-[1440px] px-5 md:px-10">
         <div className="flex flex-wrap items-end justify-between gap-6">
-          <SectionHeader eyebrow="@nexphonestore" title="Siga a NexPhone no Instagram." subtitle="Novidades, unboxings e ofertas exclusivas todos os dias." />
-          <a href="#" className="inline-flex items-center gap-2 text-[13px] font-medium text-foreground">
+          <SectionHeader eyebrow="@nexphonestore.br" title="Siga a NexPhone no Instagram." subtitle="Novidades, unboxings e ofertas exclusivas todos os dias." />
+          <a href="https://instagram.com/nexphonestore.br" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-[13px] font-medium text-foreground">
             <Instagram className="h-4 w-4" /> Seguir
           </a>
         </div>
         <div className="mt-12 grid grid-cols-2 gap-3 md:grid-cols-6">
           {grid.map((img, i) => (
-            <a key={i} href="#" className="group relative block aspect-square overflow-hidden rounded-2xl bg-[color:var(--surface)]">
+            <a key={i} href="https://instagram.com/nexphonestore.br" target="_blank" rel="noopener noreferrer" className="group relative block aspect-square overflow-hidden rounded-2xl bg-[color:var(--surface)]">
               <img src={img} alt="" loading="lazy" className="h-full w-full object-contain p-4 transition-transform duration-700 group-hover:scale-110" />
               <div className="absolute inset-0 grid place-items-center bg-black/0 text-white opacity-0 transition-all group-hover:bg-black/40 group-hover:opacity-100">
                 <Instagram className="h-6 w-6" />
@@ -820,11 +820,19 @@ export function Footer() {
               A loja premium do universo Apple no Brasil. iPhones, Apple Watch, AirPods, Macs e acessórios com garantia oficial e atendimento especializado.
             </p>
             <div className="mt-6 flex gap-2">
-              {[Instagram, Facebook, Youtube].map((I, idx) => (
-                <a key={idx} href="#" className="grid h-9 w-9 place-items-center rounded-full border border-white/10 transition-colors hover:bg-white/10">
-                  <I className="h-4 w-4" />
-                </a>
-              ))}
+              <a href="https://instagram.com/nexphonestore.br" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="grid h-9 w-9 place-items-center rounded-full border border-white/10 transition-colors hover:bg-white/10">
+                <Instagram className="h-4 w-4" />
+              </a>
+              <a href="https://wa.me/5531983194026" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="grid h-9 w-9 place-items-center rounded-full border border-white/10 transition-colors hover:bg-white/10">
+                <MessageCircle className="h-4 w-4" />
+              </a>
+              <a href="#" aria-label="YouTube" className="grid h-9 w-9 place-items-center rounded-full border border-white/10 transition-colors hover:bg-white/10">
+                <Youtube className="h-4 w-4" />
+              </a>
+            </div>
+            <div className="mt-4 text-[12px] text-white/50">
+              <p>Vendas: (31) 98319-4026</p>
+              <p>Suporte: (31) 99733-1486</p>
             </div>
           </div>
           <FooterCol title="Loja" items={["iPhone", "Apple Watch", "AirPods", "MacBook", "iPad", "Acessórios"]} />
@@ -862,7 +870,7 @@ function FooterCol({ title, items }: { title: string; items: string[] }) {
 export function WhatsAppFab() {
   return (
     <a
-      href="https://wa.me/5511999999999"
+      href="https://wa.me/5531983194026"
       aria-label="Falar no WhatsApp"
       className="fixed bottom-6 right-6 z-40 grid h-14 w-14 place-items-center rounded-full bg-[#25D366] text-white shadow-[0_10px_40px_rgba(37,211,102,0.5)] transition-transform hover:scale-110"
     >
