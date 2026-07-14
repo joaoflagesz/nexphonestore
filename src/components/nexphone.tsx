@@ -579,6 +579,12 @@ function FilterPill({ children, active }: { children: React.ReactNode; active?: 
 
 function ProductCard({ p, index }: { p: Product; index: number }) {
   const discount = p.oldPrice ? Math.round(((p.oldPrice - p.price) / p.oldPrice) * 100) : 0;
+  const { addItem } = useCart();
+  const handleAdd = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    addItem({ slug: p.slug, name: p.name, price: p.price, image: p.image });
+  };
   return (
     <motion.article
       initial={{ opacity: 0, y: 24 }}
@@ -587,7 +593,11 @@ function ProductCard({ p, index }: { p: Product; index: number }) {
       transition={{ duration: 0.6, delay: (index % 4) * 0.06, ease: [0.22, 1, 0.36, 1] }}
       className="group relative flex flex-col overflow-hidden rounded-3xl border border-border bg-card transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-elevated)]"
     >
-      <div className="relative aspect-square overflow-hidden bg-[color:var(--surface)]">
+      <Link
+        to="/produto/$slug"
+        params={{ slug: p.slug }}
+        className="relative block aspect-square overflow-hidden bg-[color:var(--surface)]"
+      >
         {p.tag && (
           <span className="absolute left-3 top-3 z-10 rounded-full bg-foreground px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-background">
             {p.tag}
@@ -608,18 +618,25 @@ function ProductCard({ p, index }: { p: Product; index: number }) {
         />
         <button
           aria-label="Adicionar à sacola"
-          className="absolute right-3 bottom-3 grid h-10 w-10 translate-y-4 place-items-center rounded-full bg-foreground text-background opacity-0 shadow-lg transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100"
+          onClick={handleAdd}
+          className="absolute right-3 bottom-3 grid h-10 w-10 translate-y-4 place-items-center rounded-full bg-foreground text-background opacity-0 shadow-lg transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 hover:scale-110"
         >
           <Plus className="h-4 w-4" />
         </button>
-      </div>
+      </Link>
       <div className="flex flex-1 flex-col gap-2 p-5">
         <div className="flex items-center gap-1 text-[11px] text-muted-foreground">
           <Star className="h-3 w-3 fill-current text-yellow-500" /> {p.rating.toFixed(1)}
           <span className="text-border">·</span>
           <span>em estoque</span>
         </div>
-        <h3 className="text-[14px] font-semibold leading-tight text-foreground">{p.name}</h3>
+        <Link
+          to="/produto/$slug"
+          params={{ slug: p.slug }}
+          className="text-[14px] font-semibold leading-tight text-foreground hover:underline"
+        >
+          {p.name}
+        </Link>
         {p.colors && (
           <div className="flex gap-1.5">
             {p.colors.map((c) => (
@@ -630,18 +647,33 @@ function ProductCard({ p, index }: { p: Product; index: number }) {
         <div className="mt-1 flex items-baseline gap-2">
           {p.oldPrice && (
             <span className="text-[12px] text-muted-foreground line-through">
-              R$ {p.oldPrice.toLocaleString("pt-BR")}
+              {formatBRL(p.oldPrice)}
             </span>
           )}
           <span className="text-[18px] font-semibold text-foreground">
-            R$ {p.price.toLocaleString("pt-BR")}
+            {formatBRL(p.price)}
           </span>
         </div>
         <div className="text-[11px] text-muted-foreground">
           ou <span className="text-foreground">{p.installments}</span> sem juros
         </div>
         <div className="text-[11px] font-medium text-[color:var(--brand)]">
-          R$ {Math.round(p.price * 0.9).toLocaleString("pt-BR")} no PIX
+          {formatBRL(Math.round(p.price * 0.9))} no PIX
+        </div>
+        <div className="mt-3 flex gap-2">
+          <button
+            onClick={handleAdd}
+            className="inline-flex h-10 flex-1 items-center justify-center rounded-full bg-foreground text-[12px] font-medium text-background transition-transform hover:scale-[1.02]"
+          >
+            Adicionar à sacola
+          </button>
+          <Link
+            to="/produto/$slug"
+            params={{ slug: p.slug }}
+            className="inline-flex h-10 items-center justify-center rounded-full border border-border px-4 text-[12px] font-medium text-foreground hover:bg-foreground/5"
+          >
+            Ver
+          </Link>
         </div>
       </div>
     </motion.article>
