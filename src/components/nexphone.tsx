@@ -1,6 +1,6 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Search,
   ShoppingBag,
@@ -24,6 +24,10 @@ import {
   Minus,
   Check,
   Apple,
+  LogOut,
+  Heart,
+  Package,
+  KeyRound,
 } from "lucide-react";
 
 import heroIphone from "@/assets/hero-iphone.jpg";
@@ -41,6 +45,7 @@ import prodMagsafe from "@/assets/prod-magsafe.jpg";
 
 import { useCart } from "@/lib/cart-store";
 import { formatBRL } from "@/lib/product-images";
+import { useAuth } from "@/lib/auth-store";
 
 /* ---------------- Nav ---------------- */
 
