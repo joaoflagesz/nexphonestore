@@ -14,8 +14,107 @@ export type Database = {
   }
   public: {
     Tables: {
+      favorites: {
+        Row: {
+          created_at: string
+          id: string
+          product_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          product_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          product_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "favorites_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      order_items: {
+        Row: {
+          id: string
+          image: string | null
+          order_id: string
+          price: number
+          product_name: string
+          product_slug: string
+          quantity: number
+          variant: string | null
+        }
+        Insert: {
+          id?: string
+          image?: string | null
+          order_id: string
+          price: number
+          product_name: string
+          product_slug: string
+          quantity: number
+          variant?: string | null
+        }
+        Update: {
+          id?: string
+          image?: string | null
+          order_id?: string
+          price?: number
+          product_name?: string
+          product_slug?: string
+          quantity?: number
+          variant?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          address: Json | null
+          created_at: string
+          id: string
+          status: string
+          total: number
+          user_id: string
+        }
+        Insert: {
+          address?: Json | null
+          created_at?: string
+          id?: string
+          status?: string
+          total: number
+          user_id: string
+        }
+        Update: {
+          address?: Json | null
+          created_at?: string
+          id?: string
+          status?: string
+          total?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       products: {
         Row: {
+          availability: string
+          brand: string
           category: string
           colors: Json
           created_at: string
@@ -28,15 +127,20 @@ export type Database = {
           installments: string
           name: string
           old_price: number | null
+          pix_discount: number
           price: number
           rating: number
+          reviews: Json
           slug: string
           specs: Json
           stock: number
           storage_options: Json
           tag: string | null
+          warranty: string
         }
         Insert: {
+          availability?: string
+          brand?: string
           category: string
           colors?: Json
           created_at?: string
@@ -49,15 +153,20 @@ export type Database = {
           installments?: string
           name: string
           old_price?: number | null
+          pix_discount?: number
           price: number
           rating?: number
+          reviews?: Json
           slug: string
           specs?: Json
           stock?: number
           storage_options?: Json
           tag?: string | null
+          warranty?: string
         }
         Update: {
+          availability?: string
+          brand?: string
           category?: string
           colors?: Json
           created_at?: string
@@ -70,13 +179,46 @@ export type Database = {
           installments?: string
           name?: string
           old_price?: number | null
+          pix_discount?: number
           price?: number
           rating?: number
+          reviews?: Json
           slug?: string
           specs?: Json
           stock?: number
           storage_options?: Json
           tag?: string | null
+          warranty?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          cpf: string
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          cpf: string
+          created_at?: string
+          email: string
+          full_name: string
+          id: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          cpf?: string
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          phone?: string | null
+          updated_at?: string
         }
         Relationships: []
       }
@@ -85,7 +227,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_email_by_cpf: { Args: { _cpf: string }; Returns: string }
     }
     Enums: {
       [_ in never]: never
