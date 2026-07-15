@@ -1,6 +1,6 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Search,
   ShoppingBag,
@@ -24,6 +24,10 @@ import {
   Minus,
   Check,
   Apple,
+  LogOut,
+  Heart,
+  Package,
+  KeyRound,
 } from "lucide-react";
 
 import heroIphone from "@/assets/hero-iphone.jpg";
@@ -41,6 +45,7 @@ import prodMagsafe from "@/assets/prod-magsafe.jpg";
 
 import { useCart } from "@/lib/cart-store";
 import { formatBRL } from "@/lib/product-images";
+import { useAuth } from "@/lib/auth-store";
 
 /* ---------------- Nav ---------------- */
 
@@ -56,13 +61,39 @@ const NAV_LINKS: { label: string; to: string; params?: Record<string, string> }[
 export function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [userOpen, setUserOpen] = useState(false);
+  const [q, setQ] = useState("");
   const cart = useCart();
+  const { user, profile, signOut } = useAuth();
+  const navigate = useNavigate();
+  const userMenuRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) {
+        setUserOpen(false);
+      }
+    };
+    if (userOpen) document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, [userOpen]);
+
+  const submitSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const query = q.trim();
+    if (!query) return;
+    setSearchOpen(false);
+    setOpen(false);
+    navigate({ to: "/busca", search: { q: query } });
+  };
 
   return (
     <header
@@ -94,12 +125,47 @@ export function Nav() {
         </nav>
 
         <div className="flex items-center gap-1 text-white">
-          <button aria-label="Buscar" className="grid h-9 w-9 place-items-center rounded-full transition-colors hover:bg-white/10">
+          <button
+            aria-label="Buscar"
+            onClick={() => setSearchOpen((v) => !v)}
+            className="grid h-9 w-9 place-items-center rounded-full transition-colors hover:bg-white/10"
+          >
             <Search className="h-4 w-4" />
           </button>
-          <button aria-label="Conta" className="hidden h-9 w-9 place-items-center rounded-full transition-colors hover:bg-white/10 sm:grid">
-            <User className="h-4 w-4" />
-          </button>
+
+          <div ref={userMenuRef} className="relative hidden sm:block">
+            <button
+              aria-label="Conta"
+              onClick={() => setUserOpen((v) => !v)}
+              className="grid h-9 w-9 place-items-center rounded-full transition-colors hover:bg-white/10"
+            >
+              <User className="h-4 w-4" />
+            </button>
+            {userOpen && (
+              <div className="absolute right-0 top-full mt-2 w-64 overflow-hidden rounded-2xl border border-white/10 bg-[#0d0d0d] p-2 shadow-2xl">
+                {user ? (
+                  <>
+                    <div className="border-b border-white/5 px-3 py-2.5">
+                      <p className="text-[13px] font-medium text-white truncate">{profile?.full_name || "Cliente"}</p>
+                      <p className="text-[11px] text-white/50 truncate">{user.email}</p>
+                    </div>
+                    <UserMenuItem onClick={() => { setUserOpen(false); navigate({ to: "/conta" }); }} icon={User}>Minha Conta</UserMenuItem>
+                    <UserMenuItem onClick={() => { setUserOpen(false); navigate({ to: "/conta", search: { tab: "pedidos" } as any }); }} icon={Package}>Meus Pedidos</UserMenuItem>
+                    <UserMenuItem onClick={() => { setUserOpen(false); navigate({ to: "/conta", search: { tab: "favoritos" } as any }); }} icon={Heart}>Favoritos</UserMenuItem>
+                    <UserMenuItem onClick={() => { setUserOpen(false); navigate({ to: "/conta", search: { tab: "senha" } as any }); }} icon={KeyRound}>Alterar Senha</UserMenuItem>
+                    <div className="my-1 border-t border-white/5" />
+                    <UserMenuItem onClick={async () => { setUserOpen(false); await signOut(); }} icon={LogOut}>Sair</UserMenuItem>
+                  </>
+                ) : (
+                  <>
+                    <UserMenuItem onClick={() => { setUserOpen(false); navigate({ to: "/login" }); }} icon={User}>Entrar</UserMenuItem>
+                    <UserMenuItem onClick={() => { setUserOpen(false); navigate({ to: "/cadastro" }); }} icon={Sparkles}>Criar Conta</UserMenuItem>
+                  </>
+                )}
+              </div>
+            )}
+          </div>
+
           <button
             aria-label="Sacola"
             onClick={cart.open}
@@ -122,6 +188,25 @@ export function Nav() {
         </div>
       </div>
 
+      {searchOpen && (
+        <div className="glass-dark border-t border-white/5">
+          <form onSubmit={submitSearch} className="mx-auto flex max-w-[1440px] items-center gap-3 px-5 py-4 md:px-10">
+            <Search className="h-4 w-4 text-white/50" />
+            <input
+              autoFocus
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="Busque por iPhone 16, AirPods Pro, MacBook…"
+              className="flex-1 bg-transparent text-[14px] text-white placeholder:text-white/40 focus:outline-none"
+            />
+            <button type="submit" className="rounded-full bg-white px-4 py-1.5 text-[12px] font-medium text-black">Buscar</button>
+            <button type="button" onClick={() => setSearchOpen(false)} className="grid h-8 w-8 place-items-center rounded-full text-white/70 hover:bg-white/10">
+              <X className="h-4 w-4" />
+            </button>
+          </form>
+        </div>
+      )}
+
       {open && (
         <div className="glass-dark border-t border-white/5 lg:hidden">
           <div className="mx-auto max-w-[1440px] px-5 py-4">
@@ -137,11 +222,43 @@ export function Nav() {
                   {l.label}
                 </Link>
               ))}
+              <div className="my-2 border-t border-white/5" />
+              {user ? (
+                <>
+                  <Link to="/conta" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm text-white/85 hover:bg-white/5">Minha conta</Link>
+                  <button onClick={async () => { setOpen(false); await signOut(); }} className="rounded-lg px-3 py-2.5 text-left text-sm text-white/85 hover:bg-white/5">Sair</button>
+                </>
+              ) : (
+                <>
+                  <Link to="/login" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm text-white/85 hover:bg-white/5">Entrar</Link>
+                  <Link to="/cadastro" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm text-white/85 hover:bg-white/5">Criar conta</Link>
+                </>
+              )}
             </div>
           </div>
         </div>
       )}
     </header>
+  );
+}
+
+function UserMenuItem({
+  children,
+  onClick,
+  icon: Icon,
+}: {
+  children: React.ReactNode;
+  onClick: () => void;
+  icon: typeof User;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-[13px] text-white/85 transition-colors hover:bg-white/5"
+    >
+      <Icon className="h-3.5 w-3.5 text-white/60" />
+      {children}
+    </button>
   );
 }
 

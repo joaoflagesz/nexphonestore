@@ -13,6 +13,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { CartProvider } from "@/lib/cart-store";
 import { CartDrawer } from "@/components/cart-drawer";
+import { AuthProvider } from "@/lib/auth-store";
 
 function NotFoundComponent() {
   return (
@@ -122,11 +123,13 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <CartProvider>
-        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-        <Outlet />
-        <CartDrawer />
-      </CartProvider>
+      <AuthProvider>
+        <CartProvider>
+          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+          <Outlet />
+          <CartDrawer />
+        </CartProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
