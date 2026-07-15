@@ -14,8 +14,8 @@ const searchSchema = z.object({
 export const Route = createFileRoute("/busca")({
   component: SearchPage,
   validateSearch: zodValidator(searchSchema),
-  head: ({ search }) => ({
-    meta: [{ title: `Buscar por "${(search as any).q}" — NexPhoneStore` }],
+  head: () => ({
+    meta: [{ title: `Buscar — NexPhoneStore` }],
   }),
 });
 
