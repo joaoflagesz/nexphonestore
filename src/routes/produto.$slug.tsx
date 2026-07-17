@@ -64,6 +64,8 @@ function ProductPage() {
   void queryClient;
 
   const { addItem } = useCart();
+  const gallery = product.gallery.length > 0 ? product.gallery : [product.image];
+  const [activeImage, setActiveImage] = useState<string>(gallery[0]);
   const [selectedStorage, setSelectedStorage] = useState<string | null>(
     product.storage_options[0] ?? null,
   );
@@ -114,23 +116,53 @@ function ProductPage() {
 
         <section className="mx-auto grid max-w-[1280px] gap-10 px-5 py-8 md:px-10 md:py-14 lg:grid-cols-2">
           {/* Gallery */}
-          <div className="relative aspect-square overflow-hidden rounded-3xl bg-[color:var(--surface)]">
-            <img
-              src={product.image}
-              alt={product.name}
-              className="h-full w-full object-contain p-8"
-            />
-            {product.tag && (
-              <span className="absolute left-4 top-4 rounded-full bg-foreground px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-background">
-                {product.tag}
-              </span>
-            )}
-            {discount > 0 && (
-              <span className="absolute right-4 top-4 rounded-full bg-[color:var(--brand)] px-3 py-1 text-[11px] font-semibold text-white">
-                -{discount}% OFF
-              </span>
+          <div className="flex flex-col gap-4">
+            <div className="relative aspect-square overflow-hidden rounded-3xl bg-[color:var(--surface)]">
+              <img
+                key={activeImage}
+                src={activeImage}
+                alt={product.name}
+                width={1024}
+                height={1024}
+                className="h-full w-full object-contain p-8 animate-in fade-in duration-300"
+              />
+              {product.tag && (
+                <span className="absolute left-4 top-4 rounded-full bg-foreground px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-background">
+                  {product.tag}
+                </span>
+              )}
+              {discount > 0 && (
+                <span className="absolute right-4 top-4 rounded-full bg-[color:var(--brand)] px-3 py-1 text-[11px] font-semibold text-white">
+                  -{discount}% OFF
+                </span>
+              )}
+            </div>
+            {gallery.length > 1 && (
+              <div className="grid grid-cols-4 gap-3">
+                {gallery.map((src, i) => (
+                  <button
+                    key={src + i}
+                    type="button"
+                    onClick={() => setActiveImage(src)}
+                    aria-label={`Ver imagem ${i + 1}`}
+                    className={`relative aspect-square overflow-hidden rounded-2xl border-2 bg-[color:var(--surface)] transition ${
+                      activeImage === src
+                        ? "border-foreground"
+                        : "border-transparent hover:border-[color:var(--border-strong)]"
+                    }`}
+                  >
+                    <img
+                      src={src}
+                      alt={`${product.name} — vista ${i + 1}`}
+                      loading="lazy"
+                      className="h-full w-full object-contain p-2"
+                    />
+                  </button>
+                ))}
+              </div>
             )}
           </div>
+
 
           {/* Info */}
           <div className="flex flex-col">
