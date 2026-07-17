@@ -1,5 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
-import { resolveProductImage } from "./product-images";
+import { resolveProductImage, resolveProductGallery } from "./product-images";
 
 export type Product = {
   id: string;
@@ -34,7 +34,7 @@ function normalize(raw: any): Product {
     old_price: raw.old_price != null ? Number(raw.old_price) : null,
     installments: raw.installments ?? "",
     image: resolveProductImage(raw.slug, raw.image),
-    gallery: Array.isArray(raw.gallery) ? raw.gallery : [],
+    gallery: resolveProductGallery(raw.slug, Array.isArray(raw.gallery) ? raw.gallery : []),
     colors: Array.isArray(raw.colors) ? raw.colors : [],
     storage_options: Array.isArray(raw.storage_options) ? raw.storage_options : [],
     rating: Number(raw.rating ?? 5),
