@@ -64,6 +64,8 @@ function ProductPage() {
   void queryClient;
 
   const { addItem } = useCart();
+  const gallery = product.gallery.length > 0 ? product.gallery : [product.image];
+  const [activeImage, setActiveImage] = useState<string>(gallery[0]);
   const [selectedStorage, setSelectedStorage] = useState<string | null>(
     product.storage_options[0] ?? null,
   );
