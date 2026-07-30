@@ -58,6 +58,20 @@ import i17pmNatural from "@/assets/catalog/iphone-17-pro-max/color-c0c0c0.jpg";
 import i17pmDesert from "@/assets/catalog/iphone-17-pro-max/color-8e7767.jpg";
 import i17pmBlue from "@/assets/catalog/iphone-17-pro-max/color-3b5f6f.jpg";
 
+// Catalog Fase 3 — iPhone Pro (não Max)
+import i15pPersp from "@/assets/catalog/iphone-15-pro/perspective.jpg";
+import i15pBlack from "@/assets/catalog/iphone-15-pro/color-3a3a3a.jpg";
+import i15pDesert from "@/assets/catalog/iphone-15-pro/color-8e7767.jpg";
+import i15pBlue from "@/assets/catalog/iphone-15-pro/color-3b5f6f.jpg";
+import i16pPersp from "@/assets/catalog/iphone-16-pro/perspective.jpg";
+import i16pBlack from "@/assets/catalog/iphone-16-pro/color-2b2b2b.jpg";
+import i16pDesert from "@/assets/catalog/iphone-16-pro/color-8e7767.jpg";
+import i16pBlue from "@/assets/catalog/iphone-16-pro/color-3b5f6f.jpg";
+import i17pPersp from "@/assets/catalog/iphone-17-pro/perspective.jpg";
+import i17pBlack from "@/assets/catalog/iphone-17-pro/color-2b2b2b.jpg";
+import i17pDesert from "@/assets/catalog/iphone-17-pro/color-8e7767.jpg";
+import i17pBlue from "@/assets/catalog/iphone-17-pro/color-3b5f6f.jpg";
+
 // Product family galleries — first entry is the thumbnail/main image.
 // Slug variants (storage sizes) of the same physical device share the same gallery.
 const IPHONE_15 = [i15Persp];
@@ -67,6 +81,9 @@ const IPHONE_17_AIR = [i17AirPersp];
 const IPHONE_15_PRO_MAX = [i15pmPersp, i15pmFront, i15pmBack, i15pmSide];
 const IPHONE_16_PRO_MAX = [i16pmPersp, i16pmFront, i16pmBack, i16pmSide];
 const IPHONE_17_PRO_MAX = [i17pmPersp, i17pmFront, i17pmBack, i17pmSide];
+const IPHONE_15_PRO = [i15pPersp, i15pBlack, i15pBlue, i15pDesert];
+const IPHONE_16_PRO = [i16pPersp, i16pBlack, i16pBlue, i16pDesert];
+const IPHONE_17_PRO = [i17pPersp, i17pBlack, i17pBlue, i17pDesert];
 
 /** Strips the storage suffix so every capacity variant shares one family key. */
 export function familyKey(slug: string): string {
@@ -81,6 +98,9 @@ const GALLERY_BY_FAMILY: Record<string, string[]> = {
   "iphone-15-pro-max": IPHONE_15_PRO_MAX,
   "iphone-16-pro-max": IPHONE_16_PRO_MAX,
   "iphone-17-pro-max": IPHONE_17_PRO_MAX,
+  "iphone-15-pro": IPHONE_15_PRO,
+  "iphone-16-pro": IPHONE_16_PRO,
+  "iphone-17-pro": IPHONE_17_PRO,
 };
 
 /** Per-color hero shots, keyed by family then by the hex stored in products.colors. */
@@ -128,6 +148,24 @@ const COLOR_IMAGES_BY_FAMILY: Record<string, Record<string, string>> = {
     "#c0c0c0": i17pmNatural,
     "#8e7767": i17pmDesert,
     "#3b5f6f": i17pmBlue,
+  },
+  "iphone-15-pro": {
+    "#3a3a3a": i15pBlack,
+    "#c0c0c0": i15pPersp,
+    "#8e7767": i15pDesert,
+    "#3b5f6f": i15pBlue,
+  },
+  "iphone-16-pro": {
+    "#2b2b2b": i16pBlack,
+    "#c0c0c0": i16pPersp,
+    "#8e7767": i16pDesert,
+    "#3b5f6f": i16pBlue,
+  },
+  "iphone-17-pro": {
+    "#2b2b2b": i17pBlack,
+    "#c0c0c0": i17pPersp,
+    "#8e7767": i17pDesert,
+    "#3b5f6f": i17pBlue,
   },
 };
 
