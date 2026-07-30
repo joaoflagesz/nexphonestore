@@ -14,7 +14,7 @@ import {
   MessageCircle,
 } from "lucide-react";
 import { fetchProductBySlug } from "@/lib/products";
-import { formatBRL } from "@/lib/product-images";
+import { formatBRL, resolveColorImage } from "@/lib/product-images";
 import { useCart } from "@/lib/cart-store";
 import { Nav, Footer, WhatsAppFab, LaunchStrip } from "@/components/nexphone";
 
