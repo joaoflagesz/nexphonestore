@@ -20,6 +20,30 @@ import i17pmBack from "@/assets/catalog/iphone-17-pro-max/back.jpg";
 import i17pmSide from "@/assets/catalog/iphone-17-pro-max/side.jpg";
 import i17pmPersp from "@/assets/catalog/iphone-17-pro-max/perspective.jpg";
 
+// Catalog Fase 2 — iPhone standard / Air hero shots
+import i15Persp from "@/assets/catalog/iphone-15/perspective.jpg";
+import i15Black from "@/assets/catalog/iphone-15/color-1a1a1a.jpg";
+import i15Pink from "@/assets/catalog/iphone-15/color-f5b7c1.jpg";
+import i15Green from "@/assets/catalog/iphone-15/color-a3c4b4.jpg";
+import i15Yellow from "@/assets/catalog/iphone-15/color-f4d35e.jpg";
+import i15Blue from "@/assets/catalog/iphone-15/color-3b82f6.jpg";
+import i16Persp from "@/assets/catalog/iphone-16/perspective.jpg";
+import i16Black from "@/assets/catalog/iphone-16/color-1a1a1a.jpg";
+import i16White from "@/assets/catalog/iphone-16/color-f5f5f5.jpg";
+import i16Blue from "@/assets/catalog/iphone-16/color-3b82f6.jpg";
+import i16Green from "@/assets/catalog/iphone-16/color-3d5f4f.jpg";
+import i16Pink from "@/assets/catalog/iphone-16/color-f5b7c1.jpg";
+import i17Persp from "@/assets/catalog/iphone-17/perspective.jpg";
+import i17Black from "@/assets/catalog/iphone-17/color-1a1a1a.jpg";
+import i17White from "@/assets/catalog/iphone-17/color-f5f5f5.jpg";
+import i17Blue from "@/assets/catalog/iphone-17/color-3b82f6.jpg";
+import i17Red from "@/assets/catalog/iphone-17/color-e63946.jpg";
+import i17Green from "@/assets/catalog/iphone-17/color-a3c4b4.jpg";
+import i17AirPersp from "@/assets/catalog/iphone-17-air/perspective.jpg";
+import i17AirBlack from "@/assets/catalog/iphone-17-air/color-1a1a1a.jpg";
+import i17AirWhite from "@/assets/catalog/iphone-17-air/color-f5f5f5.jpg";
+import i17AirSilver from "@/assets/catalog/iphone-17-air/color-c0c0c0.jpg";
+
 // Color variants (Apple.com style, same angle/lighting as the family hero)
 import i15pmBlack from "@/assets/catalog/iphone-15-pro-max/color-3a3a3a.jpg";
 import i15pmNatural from "@/assets/catalog/iphone-15-pro-max/color-c0c0c0.jpg";
@@ -36,6 +60,10 @@ import i17pmBlue from "@/assets/catalog/iphone-17-pro-max/color-3b5f6f.jpg";
 
 // Product family galleries — first entry is the thumbnail/main image.
 // Slug variants (storage sizes) of the same physical device share the same gallery.
+const IPHONE_15 = [i15Persp];
+const IPHONE_16 = [i16Persp];
+const IPHONE_17 = [i17Persp];
+const IPHONE_17_AIR = [i17AirPersp];
 const IPHONE_15_PRO_MAX = [i15pmPersp, i15pmFront, i15pmBack, i15pmSide];
 const IPHONE_16_PRO_MAX = [i16pmPersp, i16pmFront, i16pmBack, i16pmSide];
 const IPHONE_17_PRO_MAX = [i17pmPersp, i17pmFront, i17pmBack, i17pmSide];
@@ -46,6 +74,10 @@ export function familyKey(slug: string): string {
 }
 
 const GALLERY_BY_FAMILY: Record<string, string[]> = {
+  "iphone-15": IPHONE_15,
+  "iphone-16": IPHONE_16,
+  "iphone-17": IPHONE_17,
+  "iphone-17-air": IPHONE_17_AIR,
   "iphone-15-pro-max": IPHONE_15_PRO_MAX,
   "iphone-16-pro-max": IPHONE_16_PRO_MAX,
   "iphone-17-pro-max": IPHONE_17_PRO_MAX,
@@ -53,6 +85,32 @@ const GALLERY_BY_FAMILY: Record<string, string[]> = {
 
 /** Per-color hero shots, keyed by family then by the hex stored in products.colors. */
 const COLOR_IMAGES_BY_FAMILY: Record<string, Record<string, string>> = {
+  "iphone-15": {
+    "#1a1a1a": i15Black,
+    "#f5b7c1": i15Pink,
+    "#a3c4b4": i15Green,
+    "#f4d35e": i15Yellow,
+    "#3b82f6": i15Blue,
+  },
+  "iphone-16": {
+    "#1a1a1a": i16Black,
+    "#f5f5f5": i16White,
+    "#3b82f6": i16Blue,
+    "#3d5f4f": i16Green,
+    "#f5b7c1": i16Pink,
+  },
+  "iphone-17": {
+    "#1a1a1a": i17Black,
+    "#f5f5f5": i17White,
+    "#3b82f6": i17Blue,
+    "#e63946": i17Red,
+    "#a3c4b4": i17Green,
+  },
+  "iphone-17-air": {
+    "#1a1a1a": i17AirBlack,
+    "#f5f5f5": i17AirWhite,
+    "#c0c0c0": i17AirSilver,
+  },
   "iphone-15-pro-max": {
     "#3a3a3a": i15pmBlack,
     "#c0c0c0": i15pmNatural,
