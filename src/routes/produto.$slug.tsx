@@ -236,7 +236,7 @@ function ProductPage() {
                   {product.colors.map((c) => (
                     <button
                       key={c}
-                      onClick={() => setSelectedColor(c)}
+                      onClick={() => handleSelectColor(c)}
                       aria-label={`Cor ${c}`}
                       className={`grid h-10 w-10 place-items-center rounded-full border-2 transition ${
                         selectedColor === c ? "border-foreground" : "border-border"
