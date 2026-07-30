@@ -58,6 +58,20 @@ import i17pmNatural from "@/assets/catalog/iphone-17-pro-max/color-c0c0c0.jpg";
 import i17pmDesert from "@/assets/catalog/iphone-17-pro-max/color-8e7767.jpg";
 import i17pmBlue from "@/assets/catalog/iphone-17-pro-max/color-3b5f6f.jpg";
 
+// Catalog Fase 3 — iPhone Pro (não Max)
+import i15pPersp from "@/assets/catalog/iphone-15-pro/perspective.jpg";
+import i15pBlack from "@/assets/catalog/iphone-15-pro/color-3a3a3a.jpg";
+import i15pDesert from "@/assets/catalog/iphone-15-pro/color-8e7767.jpg";
+import i15pBlue from "@/assets/catalog/iphone-15-pro/color-3b5f6f.jpg";
+import i16pPersp from "@/assets/catalog/iphone-16-pro/perspective.jpg";
+import i16pBlack from "@/assets/catalog/iphone-16-pro/color-2b2b2b.jpg";
+import i16pDesert from "@/assets/catalog/iphone-16-pro/color-8e7767.jpg";
+import i16pBlue from "@/assets/catalog/iphone-16-pro/color-3b5f6f.jpg";
+import i17pPersp from "@/assets/catalog/iphone-17-pro/perspective.jpg";
+import i17pBlack from "@/assets/catalog/iphone-17-pro/color-2b2b2b.jpg";
+import i17pDesert from "@/assets/catalog/iphone-17-pro/color-8e7767.jpg";
+import i17pBlue from "@/assets/catalog/iphone-17-pro/color-3b5f6f.jpg";
+
 // Product family galleries — first entry is the thumbnail/main image.
 // Slug variants (storage sizes) of the same physical device share the same gallery.
 const IPHONE_15 = [i15Persp];
