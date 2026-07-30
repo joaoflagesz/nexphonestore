@@ -20,26 +20,60 @@ import i17pmBack from "@/assets/catalog/iphone-17-pro-max/back.jpg";
 import i17pmSide from "@/assets/catalog/iphone-17-pro-max/side.jpg";
 import i17pmPersp from "@/assets/catalog/iphone-17-pro-max/perspective.jpg";
 
+// Color variants (Apple.com style, same angle/lighting as the family hero)
+import i15pmBlack from "@/assets/catalog/iphone-15-pro-max/color-3a3a3a.jpg";
+import i15pmNatural from "@/assets/catalog/iphone-15-pro-max/color-c0c0c0.jpg";
+import i15pmDesert from "@/assets/catalog/iphone-15-pro-max/color-8e7767.jpg";
+import i15pmBlue from "@/assets/catalog/iphone-15-pro-max/color-3b5f6f.jpg";
+import i16pmBlack from "@/assets/catalog/iphone-16-pro-max/color-2b2b2b.jpg";
+import i16pmNatural from "@/assets/catalog/iphone-16-pro-max/color-c0c0c0.jpg";
+import i16pmDesert from "@/assets/catalog/iphone-16-pro-max/color-8e7767.jpg";
+import i16pmBlue from "@/assets/catalog/iphone-16-pro-max/color-3b5f6f.jpg";
+import i17pmBlack from "@/assets/catalog/iphone-17-pro-max/color-2b2b2b.jpg";
+import i17pmNatural from "@/assets/catalog/iphone-17-pro-max/color-c0c0c0.jpg";
+import i17pmDesert from "@/assets/catalog/iphone-17-pro-max/color-8e7767.jpg";
+import i17pmBlue from "@/assets/catalog/iphone-17-pro-max/color-3b5f6f.jpg";
+
 // Product family galleries — first entry is the thumbnail/main image.
 // Slug variants (storage sizes) of the same physical device share the same gallery.
 const IPHONE_15_PRO_MAX = [i15pmPersp, i15pmFront, i15pmBack, i15pmSide];
 const IPHONE_16_PRO_MAX = [i16pmPersp, i16pmFront, i16pmBack, i16pmSide];
 const IPHONE_17_PRO_MAX = [i17pmPersp, i17pmFront, i17pmBack, i17pmSide];
 
-export const PRODUCT_GALLERY_BY_SLUG: Record<string, string[]> = {
-  "iphone-15-pro-max-256gb": IPHONE_15_PRO_MAX,
-  "iphone-15-pro-max-128gb": IPHONE_15_PRO_MAX,
-  "iphone-15-pro-max-512gb": IPHONE_15_PRO_MAX,
-  "iphone-15-pro-max-1tb": IPHONE_15_PRO_MAX,
-  "iphone-16-pro-max-256gb": IPHONE_16_PRO_MAX,
-  "iphone-16-pro-max-128gb": IPHONE_16_PRO_MAX,
-  "iphone-16-pro-max-512gb": IPHONE_16_PRO_MAX,
-  "iphone-16-pro-max-1tb": IPHONE_16_PRO_MAX,
-  "iphone-17-pro-max-256gb": IPHONE_17_PRO_MAX,
-  "iphone-17-pro-max-128gb": IPHONE_17_PRO_MAX,
-  "iphone-17-pro-max-512gb": IPHONE_17_PRO_MAX,
-  "iphone-17-pro-max-1tb": IPHONE_17_PRO_MAX,
+/** Strips the storage suffix so every capacity variant shares one family key. */
+export function familyKey(slug: string): string {
+  return slug.replace(/-(\d+(gb|tb))$/i, "");
+}
+
+const GALLERY_BY_FAMILY: Record<string, string[]> = {
+  "iphone-15-pro-max": IPHONE_15_PRO_MAX,
+  "iphone-16-pro-max": IPHONE_16_PRO_MAX,
+  "iphone-17-pro-max": IPHONE_17_PRO_MAX,
 };
+
+/** Per-color hero shots, keyed by family then by the hex stored in products.colors. */
+const COLOR_IMAGES_BY_FAMILY: Record<string, Record<string, string>> = {
+  "iphone-15-pro-max": {
+    "#3a3a3a": i15pmBlack,
+    "#c0c0c0": i15pmNatural,
+    "#8e7767": i15pmDesert,
+    "#3b5f6f": i15pmBlue,
+  },
+  "iphone-16-pro-max": {
+    "#2b2b2b": i16pmBlack,
+    "#c0c0c0": i16pmNatural,
+    "#8e7767": i16pmDesert,
+    "#3b5f6f": i16pmBlue,
+  },
+  "iphone-17-pro-max": {
+    "#2b2b2b": i17pmBlack,
+    "#c0c0c0": i17pmNatural,
+    "#8e7767": i17pmDesert,
+    "#3b5f6f": i17pmBlue,
+  },
+};
+
+export const PRODUCT_GALLERY_BY_SLUG: Record<string, string[]> = GALLERY_BY_FAMILY;
 
 // Legacy single-image map (kept for slugs without a full gallery yet).
 export const PRODUCT_IMAGE_BY_SLUG: Record<string, string> = {
@@ -53,19 +87,35 @@ export const PRODUCT_IMAGE_BY_SLUG: Record<string, string> = {
   "carregador-magsafe-25w": prodMagsafe,
 };
 
+/** Image for a specific color of a product, when one exists. */
+export function resolveColorImage(slug: string, color: string | null): string | null {
+  if (!color) return null;
+  const map = COLOR_IMAGES_BY_FAMILY[familyKey(slug)];
+  return map?.[color.toLowerCase()] ?? null;
+}
+
+/** All color hexes that have a dedicated shot for this product. */
+export function colorImageMap(slug: string): Record<string, string> {
+  return COLOR_IMAGES_BY_FAMILY[familyKey(slug)] ?? {};
+}
+
 export function resolveProductImage(slug: string, fallback?: string | null): string {
-  const gallery = PRODUCT_GALLERY_BY_SLUG[slug];
+  const gallery = GALLERY_BY_FAMILY[familyKey(slug)];
   if (gallery && gallery.length > 0) return gallery[0];
   return PRODUCT_IMAGE_BY_SLUG[slug] ?? fallback ?? prodIphone16;
 }
 
 export function resolveProductGallery(slug: string, fallbackGallery: string[] = []): string[] {
-  const gallery = PRODUCT_GALLERY_BY_SLUG[slug];
-  if (gallery && gallery.length > 0) return gallery;
+  const key = familyKey(slug);
+  const gallery = GALLERY_BY_FAMILY[key] ?? [];
+  const colorShots = Object.values(COLOR_IMAGES_BY_FAMILY[key] ?? {});
+  const combined = [...gallery, ...colorShots];
+  if (combined.length > 0) return Array.from(new Set(combined));
   const legacy = PRODUCT_IMAGE_BY_SLUG[slug];
   if (legacy) return [legacy, ...fallbackGallery.filter((g) => g !== legacy)];
   return fallbackGallery;
 }
+
 
 export function formatBRL(value: number): string {
   return `R$ ${Number(value).toLocaleString("pt-BR", { minimumFractionDigits: 0, maximumFractionDigits: 2 })}`;

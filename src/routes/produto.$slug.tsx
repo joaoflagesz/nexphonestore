@@ -14,7 +14,7 @@ import {
   MessageCircle,
 } from "lucide-react";
 import { fetchProductBySlug } from "@/lib/products";
-import { formatBRL } from "@/lib/product-images";
+import { formatBRL, resolveColorImage } from "@/lib/product-images";
 import { useCart } from "@/lib/cart-store";
 import { Nav, Footer, WhatsAppFab, LaunchStrip } from "@/components/nexphone";
 
@@ -65,14 +65,22 @@ function ProductPage() {
 
   const { addItem } = useCart();
   const gallery = product.gallery.length > 0 ? product.gallery : [product.image];
-  const [activeImage, setActiveImage] = useState<string>(gallery[0]);
   const [selectedStorage, setSelectedStorage] = useState<string | null>(
     product.storage_options[0] ?? null,
   );
-  const [selectedColor, setSelectedColor] = useState<string | null>(
-    product.colors[0] ?? null,
+  const initialColor = product.colors[0] ?? null;
+  const [selectedColor, setSelectedColor] = useState<string | null>(initialColor);
+  const [activeImage, setActiveImage] = useState<string>(
+    resolveColorImage(product.slug, initialColor) ?? gallery[0],
   );
   const [qty, setQty] = useState(1);
+
+  const handleSelectColor = (color: string) => {
+    setSelectedColor(color);
+    const shot = resolveColorImage(product.slug, color);
+    if (shot) setActiveImage(shot);
+  };
+
 
   const discount = product.old_price
     ? Math.round(((product.old_price - product.price) / product.old_price) * 100)
@@ -228,7 +236,7 @@ function ProductPage() {
                   {product.colors.map((c) => (
                     <button
                       key={c}
-                      onClick={() => setSelectedColor(c)}
+                      onClick={() => handleSelectColor(c)}
                       aria-label={`Cor ${c}`}
                       className={`grid h-10 w-10 place-items-center rounded-full border-2 transition ${
                         selectedColor === c ? "border-foreground" : "border-border"
