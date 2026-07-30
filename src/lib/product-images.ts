@@ -81,6 +81,9 @@ const IPHONE_17_AIR = [i17AirPersp];
 const IPHONE_15_PRO_MAX = [i15pmPersp, i15pmFront, i15pmBack, i15pmSide];
 const IPHONE_16_PRO_MAX = [i16pmPersp, i16pmFront, i16pmBack, i16pmSide];
 const IPHONE_17_PRO_MAX = [i17pmPersp, i17pmFront, i17pmBack, i17pmSide];
+const IPHONE_15_PRO = [i15pPersp, i15pBlack, i15pBlue, i15pDesert];
+const IPHONE_16_PRO = [i16pPersp, i16pBlack, i16pBlue, i16pDesert];
+const IPHONE_17_PRO = [i17pPersp, i17pBlack, i17pBlue, i17pDesert];
 
 /** Strips the storage suffix so every capacity variant shares one family key. */
 export function familyKey(slug: string): string {
