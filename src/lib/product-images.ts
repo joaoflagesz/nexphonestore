@@ -149,6 +149,24 @@ const COLOR_IMAGES_BY_FAMILY: Record<string, Record<string, string>> = {
     "#8e7767": i17pmDesert,
     "#3b5f6f": i17pmBlue,
   },
+  "iphone-15-pro": {
+    "#3a3a3a": i15pBlack,
+    "#c0c0c0": i15pPersp,
+    "#8e7767": i15pDesert,
+    "#3b5f6f": i15pBlue,
+  },
+  "iphone-16-pro": {
+    "#2b2b2b": i16pBlack,
+    "#c0c0c0": i16pPersp,
+    "#8e7767": i16pDesert,
+    "#3b5f6f": i16pBlue,
+  },
+  "iphone-17-pro": {
+    "#2b2b2b": i17pBlack,
+    "#c0c0c0": i17pPersp,
+    "#8e7767": i17pDesert,
+    "#3b5f6f": i17pBlue,
+  },
 };
 
 export const PRODUCT_GALLERY_BY_SLUG: Record<string, string[]> = GALLERY_BY_FAMILY;
