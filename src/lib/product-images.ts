@@ -98,6 +98,9 @@ const GALLERY_BY_FAMILY: Record<string, string[]> = {
   "iphone-15-pro-max": IPHONE_15_PRO_MAX,
   "iphone-16-pro-max": IPHONE_16_PRO_MAX,
   "iphone-17-pro-max": IPHONE_17_PRO_MAX,
+  "iphone-15-pro": IPHONE_15_PRO,
+  "iphone-16-pro": IPHONE_16_PRO,
+  "iphone-17-pro": IPHONE_17_PRO,
 };
 
 /** Per-color hero shots, keyed by family then by the hex stored in products.colors. */
